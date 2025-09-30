@@ -2,14 +2,19 @@ import Header from "../../components/header/index";
 import styles from "./home.module.css";
 import cameraIcon from "./images/camera-icon.png";
 import captureIcon from "./images/capture-icon.png";
+import { Button } from "react-bootstrap";
 import { useRef, useState } from "react";
+import lerImagem from "../../services/ocrCaller";
+import base64ToFile from "../../utils/base64ToFile";
 
 export default function Home() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [photo, setPhoto] = useState(null);
+  const [serial, setSerial] = useState(null);
   const [capture, setCapture] = useState(false);
 
+  // Função responsável por iniciar a câmera
   const startCamera = async () => {
     console.log(capture);
     setCapture(true);
@@ -29,6 +34,7 @@ export default function Home() {
     }
   };
 
+  // Função responsável por tirar a foto
   const takePhoto = () => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
@@ -41,6 +47,13 @@ export default function Home() {
     const imageData = canvasRef.current.toDataURL("image/png");
     setPhoto(imageData);
     setCapture(false);
+  };
+
+  // Função responsável por capturar a foto tirada,
+  // realizar a leitura e setar o serial number
+  const handleConfirmPhoto = async () => {
+    const file = base64ToFile(photo, "serial.png");
+    const response = await lerImagem(file);
   };
 
   return (
@@ -65,6 +78,7 @@ export default function Home() {
                 disabled
                 type="text"
                 id="sn"
+                value={serial ? serial : ""}
                 placeholder="O serial number aparecerá aqui"
               />
             </div>
@@ -81,6 +95,13 @@ export default function Home() {
               src={photo}
               alt="Foto capturada"
             />
+            <p>
+              Certifique-se de que a foto está em boa resolução para
+              identificação do Serial Number. Após isso, clique em confirmar.
+            </p>
+            <Button onClick={handleConfirmPhoto} variant="success">
+              <strong>Confirmar</strong>
+            </Button>
           </div>
         )}
       </div>

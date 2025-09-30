@@ -16,7 +16,7 @@ export default function Home() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode: "user",
+          facingMode: { exact: "environment" },
           width: { ideal: 1280 },
           height: { ideal: 1920 },
         }, // setando a câmera traseira

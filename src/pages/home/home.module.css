@@ -12,7 +12,7 @@
     background-color: rgb(217, 213, 213);
     border-radius: 20px;
     padding: 2rem;
-    width: 50%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -26,9 +26,32 @@
 }
 
 .inputSerial{
-    width: 50%;
+    width: 70%;
     border-radius: 10px;
     font-family: 'Inter', sans-serif;
     border: 1.5px solid black;
     padding: 0.5rem;
+}
+
+.cameraFeed{
+    border-radius: 20px;
+    text-align: center;
+    background: grey;
+    margin: 2rem;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.photoCapture{
+    width: 100%;
+    min-height: 400px;
+}
+
+.captureIcon{
+    background: none;
+    border: none;
+    padding: 20px;
+    text-align: center;
+    justify-content: center;
 }

@@ -1,14 +1,17 @@
 import Header from "../../components/header/index";
 import styles from "./home.module.css";
 import cameraIcon from "./images/camera-icon.png";
+import captureIcon from "./images/capture-icon.png";
 import { useRef, useState } from "react";
 
 export default function Home() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [photo, setPhoto] = useState(null);
+  const [capture, setCapture] = useState(false);
 
   const startCamera = async () => {
+    setCapture(true);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: { exact: "environment" } }, // setando a câmera traseira
@@ -31,35 +34,44 @@ export default function Home() {
   return (
     <>
       <Header />
-      <div className={styles.cameraContainer}>
-        <div className={styles.cameraPlaceholder} onClick={startCamera}>
-          <img src={cameraIcon} width={100} height={100} />
-          <p>
-            Clique no ícone da câmera para capturar sua <strong>foto</strong>
-          </p>
+      {!capture && (
+        <div>
+          <div className={styles.cameraContainer}>
+            <div className={styles.cameraPlaceholder} onClick={startCamera}>
+              <img src={cameraIcon} width={100} height={100} />
+              <p>
+                Clique no ícone da câmera para capturar sua{" "}
+                <strong>foto</strong>
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.inputSerialContainer}>
+            <input
+              className={styles.inputSerial}
+              disabled
+              type="text"
+              id="sn"
+              placeholder="O serial number aparecerá aqui"
+            />
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className={styles.inputSerialContainer}>
-        <input
-          className={styles.inputSerial}
-          disabled
-          type="text"
-          id="sn"
-          placeholder="O serial number aparecerá aqui"
-        />
-      </div>
-
-      <div className={styles.cameraFeed}>
-        <video ref={videoRef} width={300} height={200} autoPlay />
-        <button onClick={takePhoto}>Tirar Foto</button>
-        <canvas
-          ref={canvasRef}
-          width={300}
-          height={200}
-          style={{ display: "none" }}
-        />
-      </div>
+      {capture && (
+        <div className={styles.cameraFeed}>
+          <video className={styles.photoCapture} ref={videoRef} autoPlay />
+          <button className={styles.captureIcon} onClick={takePhoto}>
+            <img src={captureIcon} width={40} height={40} />
+          </button>
+          <canvas
+            ref={canvasRef}
+            width={300}
+            height={200}
+            style={{ display: "none" }}
+          />
+        </div>
+      )}
 
       {photo && (
         <div className={styles.photoPreview}>

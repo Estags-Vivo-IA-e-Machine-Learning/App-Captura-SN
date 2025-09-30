@@ -15,7 +15,11 @@ export default function Home() {
     setCapture(true);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { exact: "environment" } }, // setando a câmera traseira
+        video: {
+          facingMode: { exact: "environment" },
+          width: { ideal: 1280 },
+          height: { ideal: 1920 },
+        }, // setando a câmera traseira
         audio: false,
       });
       videoRef.current.srcObject = stream;

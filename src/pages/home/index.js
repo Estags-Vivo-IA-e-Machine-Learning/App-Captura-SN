@@ -11,6 +11,7 @@ export default function Home() {
   const [capture, setCapture] = useState(false);
 
   const startCamera = async () => {
+    console.log(capture);
     setCapture(true);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({

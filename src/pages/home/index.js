@@ -16,7 +16,9 @@ export default function Home() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode: { exact: "environment" },
+          facingMode: "user",
+          width: { ideal: 1280 },
+          height: { ideal: 1920 },
         }, // setando a câmera traseira
         audio: false,
       });
@@ -28,8 +30,14 @@ export default function Home() {
   };
 
   const takePhoto = () => {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
     const context = canvasRef.current.getContext("2d");
-    context.drawImage(videoRef.current, 0, 0, 300, 200);
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
     const imageData = canvasRef.current.toDataURL("image/png");
     setPhoto(imageData);
     setCapture(false);
@@ -84,8 +92,8 @@ export default function Home() {
           </button>
           <canvas
             ref={canvasRef}
-            width={300}
-            height={200}
+            width={1280}
+            height={1920}
             style={{ display: "none" }}
           />
         </div>

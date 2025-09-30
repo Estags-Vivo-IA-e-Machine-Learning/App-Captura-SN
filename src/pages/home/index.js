@@ -11,7 +11,6 @@ export default function Home() {
   const [capture, setCapture] = useState(false);
 
   const startCamera = async () => {
-    console.log(capture);
     setCapture(true);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -30,35 +29,50 @@ export default function Home() {
     context.drawImage(videoRef.current, 0, 0, 300, 200);
     const imageData = canvasRef.current.toDataURL("image/png");
     setPhoto(imageData);
+    setCapture(false);
   };
 
   return (
     <>
-      <Header />
-      {!capture && (
-        <div>
-          <div className={styles.cameraContainer}>
-            <div className={styles.cameraPlaceholder} onClick={startCamera}>
-              <img src={cameraIcon} width={100} height={100} />
-              <p>
-                Clique no ícone da câmera para capturar sua{" "}
-                <strong>foto</strong>
-              </p>
+      <div className={capture ? styles.blurBackground : ""}>
+        <Header />
+        {!capture && !photo && (
+          <div>
+            <div className={styles.cameraContainer}>
+              <div className={styles.cameraPlaceholder} onClick={startCamera}>
+                <img src={cameraIcon} width={100} height={100} />
+                <p>
+                  Clique no ícone da câmera para capturar sua{" "}
+                  <strong>foto</strong>
+                </p>
+              </div>
+            </div>
+
+            <div className={styles.inputSerialContainer}>
+              <input
+                className={styles.inputSerial}
+                disabled
+                type="text"
+                id="sn"
+                placeholder="O serial number aparecerá aqui"
+              />
             </div>
           </div>
+        )}
 
-          <div className={styles.inputSerialContainer}>
-            <input
-              className={styles.inputSerial}
-              disabled
-              type="text"
-              id="sn"
-              placeholder="O serial number aparecerá aqui"
+        {photo && (
+          <div className={styles.photoPreview}>
+            <h4>
+              <strong>Foto capturada:</strong>
+            </h4>
+            <img
+              className={styles.capturedPhoto}
+              src={photo}
+              alt="Foto capturada"
             />
           </div>
-        </div>
-      )}
-
+        )}
+      </div>
       {capture && (
         <div className={styles.cameraFeed}>
           <video className={styles.photoCapture} ref={videoRef} autoPlay />
@@ -71,13 +85,6 @@ export default function Home() {
             height={200}
             style={{ display: "none" }}
           />
-        </div>
-      )}
-
-      {photo && (
-        <div className={styles.photoPreview}>
-          <h4>Foto capturada:</h4>
-          <img src={photo} alt="Foto capturada" />
         </div>
       )}
     </>

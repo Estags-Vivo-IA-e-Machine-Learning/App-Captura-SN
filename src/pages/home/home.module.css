@@ -55,3 +55,20 @@
     text-align: center;
     justify-content: center;
 }
+
+.blurBackground {
+  filter: blur(8px);
+  pointer-events: none; /* evita interação com elementos borrados */
+  transition: filter 0.3s ease;
+}
+
+.photoPreview{
+    text-align: center;
+    padding: 2rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.capturedPhoto{
+    width: 360px;
+    height: 640px;
+}

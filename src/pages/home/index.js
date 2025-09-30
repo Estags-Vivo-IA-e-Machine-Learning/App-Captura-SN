@@ -17,8 +17,8 @@ export default function Home() {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: { exact: "environment" },
-          width: { ideal: 1280 },
-          height: { ideal: 1920 },
+          width: { ideal: 360 },
+          height: { ideal: 640 },
         }, // setando a câmera traseira
         audio: false,
       });

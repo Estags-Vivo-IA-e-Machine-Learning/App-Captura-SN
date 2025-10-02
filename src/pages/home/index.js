@@ -12,7 +12,7 @@ export default function Home() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [photo, setPhoto] = useState(null);
-  const [serial, setSerial] = useState(null);
+  const [resultadoOCR, setResultadoOCR] = useState(null);
   const [capture, setCapture] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -64,9 +64,9 @@ export default function Home() {
     const leitura = await lerImagem(formData);
     // Trata a resposta da API
     if (leitura.serialNumber == null) {
-      return setSerial("Serial Number não identificado.");
+      return setResultadoOCR("Serial Number não identificado.");
     }
-    return setSerial(leitura.serialNumber);
+    return setResultadoOCR(leitura);
   };
 
   // Função responsável por capturar a foto tirada,
@@ -79,9 +79,9 @@ export default function Home() {
 
     //Trata a resposta da API
     if (leitura.serialNumber == null) {
-      return setSerial("Serial Number não identificado.");
+      return setResultadoOCR("Serial Number não identificado.");
     }
-    return setSerial(leitura.serialNumber);
+    return setResultadoOCR(leitura);
   };
 
   return (
@@ -122,12 +122,32 @@ export default function Home() {
                 disabled
                 type="text"
                 id="sn"
-                value={serial ? serial : ""}
+                value={
+                  resultadoOCR &&
+                  resultadoOCR != "Serial Number não identificado."
+                    ? resultadoOCR.serialNumber
+                    : ""
+                }
                 placeholder={
                   loading
                     ? "Carregando...aguarde"
                     : "O serial number aparecerá aqui"
                 }
+              />
+              <input
+                className={styles.inputConfidence}
+                disabled
+                type="text"
+                id="sn"
+                value={
+                  resultadoOCR &&
+                  resultadoOCR != "Serial Number não identificado."
+                    ? "Assertividade de leitura: " +
+                      resultadoOCR.confidence +
+                      "%"
+                    : ""
+                }
+                placeholder="A assertividade do serial number aparecerá aqui"
               />
             </div>
           </div>

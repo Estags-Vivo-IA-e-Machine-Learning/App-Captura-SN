@@ -112,6 +112,7 @@ export default function Home() {
                   accept="image/*"
                   style={{ display: "block" }}
                   onChange={handleUpload}
+                  className={styles.inputUpload}
                 />
               </div>
             </div>

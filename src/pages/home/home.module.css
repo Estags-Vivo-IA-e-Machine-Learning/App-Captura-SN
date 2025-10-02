@@ -48,6 +48,13 @@
     align-items: center;
 }
 
+.inputUpload{
+    white-space: normal;       
+    overflow-wrap: break-word; 
+    word-break: break-word;    
+    max-width: 100%;           
+}
+
 .inputSerial{
     width: 70%;
     border-radius: 10px;

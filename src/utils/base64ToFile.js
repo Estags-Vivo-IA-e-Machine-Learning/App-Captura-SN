@@ -1,10 +1,19 @@
-export default function base64ToFile(base64, filename, mimetype = "image/png") {
-  const byteString = atob(base64.split(",")[1]);
-  const byteArray = new Uint8Array(byteString.length);
+export default function base64ToFile(base64) {
+  // Converte base64 para um file Blob
+  const byteString = atob(ImageData.split(",")[1]);
+  const mimeString = base64.split(",")[0].split(":")[1].split(";")[0];
 
+  const arrayBuffer = new arrayBuffer(byteString.length);
+  const bufferVision = new Uint8Array(arrayBuffer);
   for (let i = 0; i < byteString.length; i++) {
-    byteArray[i] = byteString.charCodeAt(i);
+    bufferVision[i] = byteString.charCodeAt(i);
   }
 
-  return new File([byteArray], filename, { type: mimetype });
+  const blob = new Blob([arrayBuffer], { type: mimeString });
+
+  // Cria o formData
+  const formData = new FormData();
+  formData.append("img", blob, "img.png"); //img é o nome do arquivo esperado pela API
+
+  return formData;
 }

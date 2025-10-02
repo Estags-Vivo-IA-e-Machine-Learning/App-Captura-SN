@@ -1,6 +1,7 @@
 import Header from "../../components/header/index";
 import styles from "./home.module.css";
 import cameraIcon from "./images/camera-icon.png";
+import uploadIcon from "./images/file-upload-icon.png";
 import captureIcon from "./images/capture-icon.png";
 import { Button } from "react-bootstrap";
 import { useRef, useState } from "react";
@@ -13,6 +14,7 @@ export default function Home() {
   const [photo, setPhoto] = useState(null);
   const [serial, setSerial] = useState(null);
   const [capture, setCapture] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Função responsável por iniciar a câmera
   const startCamera = async () => {
@@ -49,11 +51,37 @@ export default function Home() {
     setCapture(false);
   };
 
+  const handleUpload = async (e) => {
+    // Recebendo o arquivo
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setLoading(true);
+    // Cria um formData e adiciona um arquivo
+    const formData = new FormData();
+    formData.append("img", file); //img se refere ao nome do campo que a API espera
+
+    const leitura = await lerImagem(formData);
+    // Trata a resposta da API
+    if (leitura.serialNumber == null) {
+      return setSerial("Serial Number não identificado.");
+    }
+    return setSerial(leitura.serialNumber);
+  };
+
   // Função responsável por capturar a foto tirada,
   // realizar a leitura e setar o serial number
   const handleConfirmPhoto = async () => {
-    const file = base64ToFile(photo, "serial.png");
-    const response = await lerImagem(file);
+    // Convertendo o arquivo base64 em um file de formData
+    const file = base64ToFile(photo);
+    // Chamando a API de leitura do OCR e retornando a resposta da mesma
+    const leitura = await lerImagem(file);
+
+    //Trata a resposta da API
+    if (leitura.serialNumber == null) {
+      return setSerial("Serial Number não identificado.");
+    }
+    return setSerial(leitura.serialNumber);
   };
 
   return (
@@ -72,6 +100,22 @@ export default function Home() {
               </div>
             </div>
 
+            <div className={styles.uploadContainer}>
+              <div className={styles.uploadPlaceholder}>
+                <img src={uploadIcon} width={100} height={100} />
+                <p>
+                  Ou envie aqui sua <strong>imagem</strong>
+                </p>
+                <input
+                  id="fileUpload"
+                  type="file"
+                  accept="image/*"
+                  style={{ display: "block" }}
+                  onChange={handleUpload}
+                />
+              </div>
+            </div>
+
             <div className={styles.inputSerialContainer}>
               <input
                 className={styles.inputSerial}
@@ -79,7 +123,11 @@ export default function Home() {
                 type="text"
                 id="sn"
                 value={serial ? serial : ""}
-                placeholder="O serial number aparecerá aqui"
+                placeholder={
+                  loading
+                    ? "Carregando...aguarde"
+                    : "O serial number aparecerá aqui"
+                }
               />
             </div>
           </div>

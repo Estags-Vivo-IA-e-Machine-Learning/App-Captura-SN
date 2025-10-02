@@ -1,14 +1,12 @@
-export default async function lerImagem(img) {
-  const formData = new FormData();
-  formData.append("img", img);
-
+export default async function lerImagem(formData) {
   try {
-    const res = await fetch("https://api-captura-sn.onrender.com/extract-sn/", {
+    const res = await fetch("http://localhost:3000/extract-sn", {
       method: "POST",
       body: formData,
     });
 
     if (!res.ok) {
+      console.log(res);
       throw new Error("Erro na requisição");
     }
 
